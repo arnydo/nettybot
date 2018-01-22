@@ -198,7 +198,7 @@ def main():
               "URL and generate a new access token for your Bot.")
         sys.exit()
     else:
-        app.run(host='0.0.0.0', port=10010)
+        app.run(host='0.0.0.0', port=443)
 
 if __name__ == "__main__":
     main()
