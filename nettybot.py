@@ -2,8 +2,8 @@ from pprint import pprint
 import requests
 import dns.resolver
 import json
-import sys
-import os
+#import sys
+#import os
 try:
     from flask import Flask
     from flask import request
