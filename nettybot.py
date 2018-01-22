@@ -2,8 +2,8 @@ from pprint import pprint
 import requests
 import dns.resolver
 import json
-#import sys
-#import os
+import sys
+import os
 try:
     from flask import Flask
     from flask import request
@@ -198,7 +198,7 @@ def main():
               "URL and generate a new access token for your Bot.")
         sys.exit()
     else:
-        app.run(host='0.0.0.0', port=80)
+        app.run(host='0.0.0.0', port=10010)
 
 if __name__ == "__main__":
     main()
