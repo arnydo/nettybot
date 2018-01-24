@@ -76,19 +76,85 @@ def getWhoIs(domain):
     whoIsInfo  = "**WHOIS LOOKUP:**<br/>"
     return whoIsInfo
 
-def getARecord(domain):
-    answers = dns.resolver.query(domain, "A")
-    dnsInfo  = "**DNS LOOKUP:**<br/>"
-    for i in answers:
-        dnsInfo += i.address +"<br/>"
-    return dnsInfo
+class nettydns:
 
-def getMXRecord(domain):
-    answers = dns.resolver.query(domain, "MX")
-    dnsInfo  = "**MX LOOKUP:**<br/>"
-    for i in answers:
-        dnsInfo += i.address +"<br/>"
-    return dnsInfo
+    def aRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**A LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "A")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No A record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
+
+    def cnameRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**CNAME LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "CNAME")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No CNAME record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
+
+    def mxRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**MX LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "MX")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No MX record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
+
+    def txtRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**TXT LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "TXT")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No TXT record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
+
+    def soaRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**SOA LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "SOA")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No SOA record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
+
+    def srvRec(domain):
+        myResolver = dns.resolver.Resolver()
+        dnsInfo = "**SRV LOOKUP:** " +domain +"<br/>"
+        try:
+            myAnswer = myResolver.query(domain, "SRV")
+            for rdata in myAnswer:
+                dnsInfo += rdata.to_text() +"<br/>"
+        except dns.resolver.NoAnswer:
+            dnsInfo += "No SRV record(s) found...sorry!"
+        except dns.resolver.NXDOMAIN:
+            dnsInfo += "*OOPS!* - Domain doesn't appear to be valid. Typo??"
+        return dnsInfo
 
 def help_me():
 
@@ -97,6 +163,9 @@ def help_me():
            "`IP | X.X.X.X` - I will provide information about a particular IP address.<br/>" \
            "`A | domain` - I will provide A records of a given domain.<br/>" \
            "`MX | domain` - I will provide MX records of a given domain.<br/>" \
+           "`TXT | domain` - I will provide TXT records of a given domain.<br/>" \
+           "`SOA | domain` - I will provide SOA records of a given domain.<br/>" \
+           "`SRV | domain` - I will provide SRV records of a given domain.<br/>" \
            "`WHOIS | domain` - I will provide information about a domain **[IN PROGRESS]**<br/>"
 
 def greetings():
@@ -112,6 +181,7 @@ app = Flask(__name__)
 def spark_webhook():
     if request.method == 'POST':
         webhook = request.get_json(silent=True)
+        print(webhook)
         if webhook['data']['personEmail']!= bot_email:
             pprint(webhook)
         if webhook['resource'] == "memberships" and webhook['data']['personEmail'] == bot_email:
@@ -140,11 +210,27 @@ def spark_webhook():
             elif in_message.startswith('a |'):
                 data = in_message.split("|")
                 domain = data[1].lstrip()
-                msg = getARecord(domain)
+                msg = nettydns.aRec(domain)
+            elif in_message.startswith('cname |'):
+                data = in_message.split("|")
+                domain = data[1].lstrip()
+                msg = nettydns.cnameRec(domain)
             elif in_message.startswith('mx |'):
                 data = in_message.split("|")
                 domain = data[1].lstrip()
-                msg = getMXRecord(domain)
+                msg = nettydns.mxRec(domain)
+            elif in_message.startswith('txt |'):
+                data = in_message.split("|")
+                domain = data[1].lstrip()
+                msg = nettydns.txtRec(domain)
+            elif in_message.startswith('soa |'):
+                data = in_message.split("|")
+                domain = data[1].lstrip()
+                msg = nettydns.soaRec(domain)
+            elif in_message.startswith('srv |'):
+                data = in_message.split("|")
+                domain = data[1].lstrip()
+                msg = nettydns.srvRec(domain)
             elif in_message.startswith('whois |'):
                 data = in_message.split("|")
                 domain = data[1].lstrip()
