@@ -165,8 +165,7 @@ def help_me():
            "`MX | domain` - I will provide MX records of a given domain.<br/>" \
            "`TXT | domain` - I will provide TXT records of a given domain.<br/>" \
            "`SOA | domain` - I will provide SOA records of a given domain.<br/>" \
-           "`SRV | domain` - I will provide SRV records of a given domain.<br/>" \
-           "`WHOIS | domain` - I will provide information about a domain **[IN PROGRESS]**<br/>"
+           "`SRV | domain` - I will provide SRV records of a given domain.<br/>"
 
 def greetings():
 
