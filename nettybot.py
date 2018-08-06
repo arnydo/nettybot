@@ -16,7 +16,7 @@ except ImportError as e:
 #Cisco Spark Info
 baseurl = "https://api.ciscospark.com/v1"
 
-bearer = "NmJiZDUzOWUtMDcxNy00Y2M3LWEwYjYtZjdhM2FlODVmNjFiMzYyM2IxNDAtNGRh"
+bearer = "${BEARER}"
 
 headers = {
     "Accept": "application/json",
